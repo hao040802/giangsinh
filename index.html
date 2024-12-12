@@ -32,8 +32,8 @@
 
         .tree {
             margin: 0 auto;
-            width: 150px;
-            height: 200px;
+            width: 200px;
+            height: 300px;
             background: linear-gradient(to bottom, #006400, #228B22);
             clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
             position: relative;
@@ -46,8 +46,8 @@
             bottom: -30px;
             left: 50%;
             transform: translateX(-50%);
-            width: 40px;
-            height: 30px;
+            width: 60px;
+            height: 50px;
             background-color: #8B4513;
         }
 
@@ -63,11 +63,11 @@
         .lights span {
             position: absolute;
             display: block;
-            width: 10px;
-            height: 10px;
+            width: 12px;
+            height: 12px;
             background-color: #ff0;
             border-radius: 50%;
-            box-shadow: 0 0 10px #ff0;
+            box-shadow: 0 0 15px #ff0;
             animation: blink 1s infinite;
         }
 
@@ -81,7 +81,7 @@
         }
 
         .form-container {
-            margin-top: 20px;
+            margin-top: 30px;
         }
 
         .form-container input {
@@ -111,6 +111,27 @@
             color: #ffcc00;
             text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
         }
+
+        .snowflake {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #fff;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: snow 5s linear infinite;
+        }
+
+        @keyframes snow {
+            0% {
+                transform: translateY(-100vh);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -126,22 +147,40 @@
             </div>
         </div>
         <div class="form-container">
-            <input type="text" id="name" placeholder="Enter recipient's name">
+            <input type="text" id="name" placeholder="Enter recipient's name" value="Nguyễn Thúy Ngân">
             <button onclick="showMessage()">Send Wishes</button>
         </div>
         <div class="message" id="message"></div>
     </div>
+
+    <div id="snow-container"></div>
 
     <script>
         function showMessage() {
             const name = document.getElementById('name').value;
             const message = document.getElementById('message');
             if (name) {
-                message.textContent = `🎄 Wishing you, ${name}, a Merry Christmas filled with love and joy! 🎅`;
+                message.textContent = `🎄 Love you, ${name}, wishing you have a Merry Christmas filled with love and joy! 🎅`;
             } else {
                 message.textContent = '🎄 Please enter a name to send your wishes! 🎅';
             }
         }
+
+        // Function to create snowflakes
+        function createSnowflake() {
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+            snowflake.style.left = Math.random() * window.innerWidth + 'px';
+            snowflake.style.animationDuration = (Math.random() * 3 + 2) + 's'; // Random duration between 2 and 5s
+            document.getElementById('snow-container').appendChild(snowflake);
+
+            setTimeout(() => {
+                snowflake.remove();
+            }, 5000);
+        }
+
+        // Generate snowflakes periodically
+        setInterval(createSnowflake, 200);
     </script>
 </body>
 </html>
