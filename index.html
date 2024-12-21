@@ -1,75 +1,95 @@
-<script>
-  // Kết nối đến HiveMQ Broker qua WebSocket
-  const client = mqtt.connect("wss://48296e48195e4fc1a1f0bc944943df86.s1.eu.hivemq.cloud:8884/mqtt", {
-    username: "hivemq.webclient.1734758385824",
-    password: "!K6Y8tMm3:PBwxn7>gW@",
-  });
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MQTT Web App</title>
+  <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+</head>
+<body>
+  <h1>MQTT Web Client with GPS</h1>
+  <div>
+    <p><strong>Status:</strong> <span id="status">Disconnected</span></p>
+    <p><strong>Data:</strong> <span id="data">No data</span></p>
+  </div>
+  <div id="map" style="height: 500px; width: 100%;"></div>
 
-  // Hiển thị trạng thái kết nối
-  const statusElement = document.getElementById("status");
-  const dataElement = document.getElementById("data");
-  const mapElement = document.getElementById("map");
+  <script>
+    // Kết nối đến HiveMQ Broker qua WebSocket
+    const client = mqtt.connect("wss://48296e48195e4fc1a1f0bc944943df86.s1.eu.hivemq.cloud:8884/mqtt", {
+      username: "hivemq.webclient.1734758385824",
+      password: "!K6Y8tMm3:PBwxn7>gW@",
+    });
 
-  let currentMarker; // Biến lưu trữ marker hiện tại
+    // Hiển thị trạng thái kết nối
+    const statusElement = document.getElementById("status");
+    const dataElement = document.getElementById("data");
+    const mapElement = document.getElementById("map");
 
-  // Hàm cập nhật vị trí
-  function updatePosition(lat, lng) {
-    if (lat && lng) {
-      // Xóa marker cũ nếu tồn tại
-      if (currentMarker) {
-        map.removeLayer(currentMarker);
+    let currentMarker; // Biến lưu trữ marker hiện tại
+
+    // Hàm cập nhật vị trí
+    function updatePosition(lat, lng) {
+      if (lat && lng) {
+        // Xóa marker cũ nếu tồn tại
+        if (currentMarker) {
+          map.removeLayer(currentMarker);
+        }
+
+        // Thêm marker mới
+        currentMarker = L.marker([lat, lng]).addTo(map);
+        currentMarker.bindPopup("<b>Current Location</b><br>Latitude: " + lat + "<br>Longitude: " + lng);
+        map.setView([lat, lng], 18.4); // Cập nhật vị trí và zoom vào
+      } else {
+        console.error('Invalid latitude or longitude');
       }
-
-      // Thêm marker mới
-      currentMarker = L.marker([lat, lng]).addTo(map);
-      currentMarker.bindPopup("<b>Current Location</b><br>Latitude: " + lat + "<br>Longitude: " + lng);
-      map.setView([lat, lng], 18.4); // Cập nhật vị trí và zoom vào
-    } else {
-      console.error('Invalid latitude or longitude');
     }
-  }
 
-  // Hiển thị trạng thái kết nối
-  client.on("connect", () => {
-    statusElement.textContent = "Connected";
-    console.log("Connected to MQTT Broker");
-    client.subscribe("esp32/gps");
-  });
+    // Hiển thị trạng thái kết nối
+    client.on("connect", () => {
+      statusElement.textContent = "Connected";
+      console.log("Connected to MQTT Broker");
+      client.subscribe("esp32/gps");
+    });
 
-  client.on("message", (topic, message) => {
-    console.log(`Topic: ${topic}, Message: ${message.toString()}`);
-    const data = JSON.parse(message.toString());
-    if (data.latitude && data.longitude) {
-      updatePosition(data.latitude, data.longitude);
-    } else {
-      console.error('Invalid GPS data received');
-    }
-  });
+    client.on("message", (topic, message) => {
+      console.log(`Topic: ${topic}, Message: ${message.toString()}`);
+      const data = JSON.parse(message.toString());
+      if (data.latitude && data.longitude) {
+        updatePosition(data.latitude, data.longitude);
+      } else {
+        console.error('Invalid GPS data received');
+      }
+    });
 
-  client.on("error", (error) => {
-    console.error("Connection error:", error);
-    statusElement.textContent = "Error";
-  });
+    client.on("error", (error) => {
+      console.error("Connection error:", error);
+      statusElement.textContent = "Error";
+    });
 
-  client.on("close", () => {
-    statusElement.textContent = "Disconnected";
-  });
+    client.on("close", () => {
+      statusElement.textContent = "Disconnected";
+    });
 
-  // Tạo bản đồ Leaflet
-  const map = L.map('map', {
-    center: [10.731804, 106.698352], // Tọa độ mặc định
-    zoom: 18.4,
-    maxBounds: L.latLngBounds(
-      L.latLng(10.730241, 106.697202),
-      L.latLng(10.733403, 106.699948)
-    ),
-    maxZoom: 18.4,
-    minZoom: 18.4,
-    maxBoundsViscosity: 1.0
-  });
+    // Tạo bản đồ Leaflet
+    const map = L.map('map', {
+      center: [10.731804, 106.698352], // Tọa độ mặc định
+      zoom: 18.4,
+      maxBounds: L.latLngBounds(
+        L.latLng(10.730241, 106.697202),
+        L.latLng(10.733403, 106.699948)
+      ),
+      maxZoom: 18.4,
+      minZoom: 18.4,
+      maxBoundsViscosity: 1.0
+    });
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; OpenStreetMap contributors'
-  }).addTo(map);
-</script>
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+  </script>
+</body>
+</html>
