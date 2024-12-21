@@ -77,13 +77,7 @@
     const map = L.map('map', {
       center: [10.731804, 106.698352], // Tọa độ mặc định
       zoom: 18.4,
-      maxBounds: L.latLngBounds(
-        L.latLng(10.730241, 106.697202),
-        L.latLng(10.733403, 106.699948)
-      ),
-      maxZoom: 18.4,
-      minZoom: 18.4,
-      maxBoundsViscosity: 1.0
+      
     });
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
