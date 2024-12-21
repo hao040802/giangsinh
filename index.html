@@ -1,248 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Merry Christmas</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #1a1a1a;
-            color: #fff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background: radial-gradient(circle, #003b8b, #000);
-        }
-
-        .container {
-            text-align: center;
-            position: relative;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            margin: 20px;
-            color: #ffcc00;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
-        }
-
-        .tree {
-            margin: 0 auto;
-            width: 250px;
-            height: 350px;
-            background: linear-gradient(to bottom, #006400, #228B22);
-            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-            position: relative;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.7);
-            margin-bottom: 30px;
-        }
-
-        .tree:before {
-            content: "";
-            position: absolute;
-            bottom: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 60px;
-            background-color: #8B4513;
-        }
-
-        .lights {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            height: 100%;
-        }
-
-        .lights span {
-            position: absolute;
-            display: block;
-            width: 12px;
-            height: 12px;
-            background-color: #ff0;
-            border-radius: 50%;
-            box-shadow: 0 0 15px #ff0;
-            animation: blink 1s infinite;
-        }
-
-        @keyframes blink {
-            0%, 100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.5;
-            }
-        }
-
-        .form-container {
-            margin-top: 30px;
-        }
-
-        .form-container input {
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            font-size: 1rem;
-        }
-
-        .form-container button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            background-color: #ffcc00;
-            font-size: 1rem;
-            cursor: pointer;
-            color: #1a1a1a;
-        }
-
-        .form-container button:hover {
-            background-color: #ffa500;
-        }
-
-        .message {
-            margin-top: 20px;
-            font-size: 1.5rem;
-            color: #ffcc00;
-            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
-        }
-
-        .snowflake {
-            position: absolute;
-            width: 12px;
-            height: 12px;
-            background-color: #fff;
-            border-radius: 50%;
-            opacity: 0.8;
-            animation: snow 5s linear infinite;
-        }
-
-        @keyframes snow {
-            0% {
-                transform: translateY(-100vh) translateX(-50px);
-                opacity: 0.8;
-            }
-            100% {
-                transform: translateY(100vh) translateX(-50px);
-                opacity: 0;
-            }
-        }
-
-        .fire {
-            position: absolute;
-            width: 50px;
-            height: 50px;
-            background-color: #ff4500;
-            border-radius: 50%;
-            bottom: 100px;
-            left: 50%;
-            transform: translateX(-50%);
-            box-shadow: 0 0 20px #ff4500, 0 0 10px rgba(0, 0, 0, 0.7);
-        }
-
-        .house {
-            position: absolute;
-            width: 150px;
-            height: 150px;
-            background-color: #8B4513;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
-        }
-
-        .roof {
-            position: absolute;
-            width: 0;
-            height: 0;
-            border-left: 75px solid transparent;
-            border-right: 75px solid transparent;
-            border-bottom: 100px solid #2F4F4F;
-            bottom: 100px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .snow-ground {
-            position: absolute;
-            width: 100%;
-            height: 100px;
-            background-color: #fff;
-            bottom: 0;
-        }
-
-        .snowman {
-            position: absolute;
-            width: 50px;
-            height: 50px;
-            background-color: #fff;
-            border-radius: 50%;
-            bottom: 60px;
-            left: 50%;
-            transform: translateX(-50%);
-            box-shadow: 0 0 20px #fff, 0 0 10px rgba(0, 0, 0, 0.5);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MQTT Web App</title>
+  <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>Merry Christmas, Nguyễn Thúy Ngân!</h1>
-        <div class="tree">
-            <div class="lights">
-                <span style="top: 10%; left: 25%; animation-delay: 0s;"></span>
-                <span style="top: 15%; left: 75%; animation-delay: 0.2s;"></span>
-                <span style="top: 30%; left: 50%; animation-delay: 0.4s;"></span>
-                <span style="top: 50%; left: 20%; animation-delay: 0.6s;"></span>
-                <span style="top: 65%; left: 70%; animation-delay: 0.8s;"></span>
-            </div>
-        </div>
-        <div class="fire"></div>
-        <div class="house">
-            <div class="roof"></div>
-        </div>
-        <div class="snowman"></div>
-        <div class="snow-ground"></div>
-        <div class="form-container">
-            <input type="text" id="name" placeholder="Enter recipient's name" value="Nguyễn Thúy Ngân">
-            <button onclick="showMessage()">Send Wishes</button>
-        </div>
-        <div class="message" id="message"></div>
-    </div>
+  <h1>MQTT Web Client</h1>
+  <div>
+    <p><strong>Status:</strong> <span id="status">Disconnected</span></p>
+    <p><strong>Data:</strong> <span id="data">No data</span></p>
+  </div>
+  <script>
+    // Kết nối đến HiveMQ Broker
+    const client = mqtt.connect("wss://48296e48195e4fc1a1f0bc944943df86.s1.eu.hivemq.cloud:8884/mqtt", {
+      username: "hivemq.webclient.1734758385824",
+      password: "!K6Y8tMm3:PBwxn7>gW@",
+    });
 
-    <div id="snow-container"></div>
+    // Hiển thị trạng thái kết nối
+    const statusElement = document.getElementById("status");
+    const dataElement = document.getElementById("data");
 
-    <script>
-        function showMessage() {
-            const name = document.getElementById('name').value;
-            const message = document.getElementById('message');
-            if (name) {
-                message.textContent = `🎄 Love you, ${name}, wish you a Merry Christmas filled with love and joy! 🎅`;
-            } else {
-                message.textContent = '🎄 Please enter a name to send your wishes! 🎅';
-            }
-        }
+    client.on("connect", () => {
+      statusElement.textContent = "Connected";
+      console.log("Connected to MQTT Broker");
+      // Subscribe đến topic cần lấy dữ liệu
+      client.subscribe("esp32/gps");
+    });
 
-        // Function to create snowflakes
-        function createSnowflake() {
-            const snowflake = document.createElement('div');
-            snowflake.classList.add('snowflake');
-            snowflake.style.left = Math.random() * window.innerWidth + 'px';
-            snowflake.style.animationDuration = (Math.random() * 3 + 2) + 's'; // Random duration between 2 and 5s
-            document.getElementById('snow-container').appendChild(snowflake);
+    client.on("message", (topic, message) => {
+      console.log(`Topic: ${topic}, Message: ${message.toString()}`);
+      dataElement.textContent = message.toString();
+    });
 
-            setTimeout(() => {
-                snowflake.remove();
-            }, 5000);
-        }
+    client.on("error", (error) => {
+      console.error("Connection error:", error);
+      statusElement.textContent = "Error";
+    });
 
-        // Generate snowflakes periodically
-        setInterval(createSnowflake, 200);
-    </script>
+    client.on("close", () => {
+      statusElement.textContent = "Disconnected";
+    });
+  </script>
 </body>
 </html>
